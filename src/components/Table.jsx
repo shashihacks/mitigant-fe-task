@@ -6,7 +6,8 @@ import { useGetCryptoQuery } from '../services/cryptoApi';
 
 const Table = () => {
     const [start, setStart] = useState(0)
-    const [pageCount, setPageCount] = useState(5)
+    const [page, setPage] = useState(5)
+
     const {data, isFetching} =  useGetCryptoQuery(start)
     const [coins, setCoins] = useState([])
     const history = useHistory();
@@ -51,12 +52,12 @@ const Table = () => {
             })}
             </tbody>
         </table>
-
-        <div className='paginate-block'>
+        <div style={{display:'flex', justifyContent:'right'}}>
         <nav aria-label="Page navigation">
             <ul className="pagination">
-            {[...Array(pageCount).keys()].map((pageNumber, index)=><li key={index} className="page-item"><button   className="page-link" onClick={() => setStart((pageNumber*10))}>{pageNumber+1}</button></li>)}
-              
+                <li className="page-item"><button className="page-link" onClick={() =>( start <=0 ) ? setStart(0) :   setStart( start - 10)   }>Previous</button></li>
+                {[...Array(page).keys()].map((pageNumber, index)=><li key={index} className="page-item"><button   className="page-link" onClick={() => {setStart((pageNumber*10))} }>{pageNumber+1}</button></li>)}
+                <li className="page-item"><button className="page-link" onClick={() => setStart( start + 10)}>Next</button></li>
             </ul>
             </nav>
         </div>
