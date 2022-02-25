@@ -9,7 +9,7 @@ export const cryptoAPi = createApi({
     baseQuery: fetchBaseQuery({baseUrl}),
     endpoints: (builder) => ({
         getCrypto: builder.query({
-            query: (count) => `/tickers/?start=1&limit=${count}`
+            query: (start) => `/tickers/?start=${start}&limit=10`
         })
     })
 })
