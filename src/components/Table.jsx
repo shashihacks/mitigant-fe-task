@@ -5,7 +5,7 @@ import { useHistory   } from 'react-router-dom';
 import axios from 'axios'
 import {previousPage,
     nextPage,
-    setPage, setCoins, setLoading} from '../features/tableSlice'
+    setPage, setCoins, setLoading, setLastUpdated} from '../features/tableSlice'
 
 const Table = () => {
     // const [start, setStart] = useState(0)
@@ -15,7 +15,7 @@ const Table = () => {
     // const [coins, setCoins] = useState([])
  
 
-    const {start, page, coins, currentPage, isLoading} =  useSelector(state => state.counter) ;
+    const {start, page, coins, currentPage, isLoading, lastUpdated} =  useSelector(state => state.counter) ;
     const dispatch =  useDispatch()
     const history = useHistory();
     // useEffect(()=> {
@@ -25,15 +25,39 @@ const Table = () => {
     // if(isFetching) return 'Loading...'
     // const coins = data?.data
     let URL = `https://api.coinlore.net/api/tickers/?start=${start}&limit=10`
-    useEffect(()=> {    
+    const getApiData = () => {
         axios.get(URL).then(response=> {
-           dispatch(setCoins(response?.data))
-           dispatch(setLoading(false))
-        })
-    },[start])
+            dispatch(setCoins(response?.data))
+            dispatch(setLoading(false))
+         }).catch(err => {
+             console.error(err)
+         })
+    }
+    
+
+    useEffect(()=> {
+        getApiData();    
+        const interval =  setInterval(() => {
+            getApiData();
+            let d = new Date();
+            let datestring = ("0" + d.getDate()).slice(-2) + "-" + ("0"+(d.getMonth()+1)).slice(-2) + "-" +
+            d.getFullYear() + " " + ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2) + ":" + ("0" + d.getSeconds()).slice(-2);
+            dispatch(setLastUpdated(datestring))
+          }, 5000)
+
+          return () => clearInterval(interval)
+    },[URL])
     return (
         <>
-            {isLoading ? 'Fetching coin data...' : <table className="table table-hover">
+            {isLoading ? 'Fetching coin data...' : 
+            <div>
+            <div className='mt-4 mb-2' style={{display :'flex', justifyContent:'space-between'}}>
+                <h4 >Live Cryptocurrency Prices & Coin Market Caps</h4>
+                <span>Last updated: <b style={{color:'green'}}> {lastUpdated}</b></span>
+            </div>
+           
+            
+            <table className="table table-hover">
             <thead>
                 <tr>
                     <th scope="col">#</th>
@@ -62,7 +86,10 @@ const Table = () => {
                 );
             })}
             </tbody>
-        </table>}
+        </table>
+            </div>    
+        
+        }
         <div style={{display:'flex', justifyContent:'right'}}>
         <nav aria-label="Page navigation">
             <ul className="pagination">

@@ -16,7 +16,8 @@ const counterSlice = createSlice({
     page:5,
     currentPage:1,
     coins:[],
-    isLoading: true
+    isLoading: true,
+    lastUpdated: ''
   },
   reducers: {
 
@@ -27,8 +28,6 @@ const counterSlice = createSlice({
       console.log("next page")
     },
     setPage: (state,action)=> {
-      console.log(action.payload)
-      // state.pageNumber = state.pageNumber * 10;
       state.currentPage= action.payload
       if(state.currentPage === 1)
         state.start =0
@@ -42,10 +41,13 @@ const counterSlice = createSlice({
     },
     setLoading: (state,action) => {
       state.isLoading = action.payload
+    },
+    setLastUpdated: (state,action) => {
+      state.lastUpdated = action.payload
     }
 
   },
 })
 
-export const {  nextPage, previousPage, setPage ,setCoins, setLoading} = counterSlice.actions
+export const {  nextPage, previousPage, setPage ,setCoins, setLoading, setLastUpdated} = counterSlice.actions
 export default counterSlice.reducer
