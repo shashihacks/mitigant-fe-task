@@ -17,7 +17,8 @@ const counterSlice = createSlice({
     currentPage:1,
     coins:[],
     isLoading: true,
-    lastUpdated: ''
+    lastUpdated: '',
+    sortDirection: true // ascending
   },
   reducers: {
 
@@ -44,10 +45,23 @@ const counterSlice = createSlice({
     },
     setLastUpdated: (state,action) => {
       state.lastUpdated = action.payload
+    },
+    sortPrice:(state, action) => {
+      console.log("sort")
+        let sortableItems = [...state.coins];
+        state.sortDirection = !state.sortDirection   
+          sortableItems.sort((a, b) => {
+            if(state.sortDirection)   
+              return parseFloat(a['price_usd']) - parseFloat(b['price_usd']) 
+            else if(!state.sortDirection)          
+              return  parseFloat(b['price_usd']) - parseFloat(a['price_usd'])
+            });
+        state.coins = sortableItems
+   
     }
 
   },
 })
 
-export const {  nextPage, previousPage, setPage ,setCoins, setLoading, setLastUpdated} = counterSlice.actions
+export const {  nextPage, previousPage, setPage ,setCoins, setLoading, setLastUpdated, sortPrice} = counterSlice.actions
 export default counterSlice.reducer

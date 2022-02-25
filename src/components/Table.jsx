@@ -5,7 +5,7 @@ import { useHistory   } from 'react-router-dom';
 import axios from 'axios'
 import {previousPage,
     nextPage,
-    setPage, setCoins, setLoading, setLastUpdated} from '../features/tableSlice'
+    setPage, setCoins, setLoading, setLastUpdated, sortPrice} from '../features/tableSlice'
 
 const Table = () => {
     // const [start, setStart] = useState(0)
@@ -43,7 +43,7 @@ const Table = () => {
             let datestring = ("0" + d.getDate()).slice(-2) + "-" + ("0"+(d.getMonth()+1)).slice(-2) + "-" +
             d.getFullYear() + " " + ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2) + ":" + ("0" + d.getSeconds()).slice(-2);
             dispatch(setLastUpdated(datestring))
-          }, 5000)
+          }, 50000)
 
           return () => clearInterval(interval)
     },[URL])
@@ -63,7 +63,7 @@ const Table = () => {
                     <th scope="col">#</th>
                     <th scope="col">Name</th>
                     <th scope="col">Rank</th>
-                    <th scope="col">Price (USD)</th>
+                    <th style={{cursor:'pointer'}} scope="col" onClick={() => dispatch(sortPrice())}>Price (USD)</th>
                     <th scope="col">Market Cap (USD)</th>
                     <th scope='col'>1hr Change</th>
                     <th scope='col'>24 hrs Change</th>
