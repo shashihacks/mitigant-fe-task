@@ -7,19 +7,19 @@ import axios from 'axios';
 import { useParams } from 'react-router-dom';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
+const BASE_URL = `https://api.coinlore.net`
 const CoinDetail = (props) => {
   const  {coinId} =  useParams()
   const {  chartOptions, coinStats, socialStatus } =  useSelector(state => state.coinDetail) ;
   const dispatch =  useDispatch()
-  let URL = `https://api.coinlore.net/api/coin/markets/?id=${coinId}`
-  let coinStatsURL = `https://api.coinlore.net/api/ticker/?id=${coinId}`
-  let socialStatusURL = `https://api.coinlore.net/api/coin/social_stats/?id=${coinId}`
-  useEffect(() => {
+  let coinURL = `${BASE_URL}/api/coin/markets/?id=${coinId}`
+  let coinStatsURL = `${BASE_URL}/api/ticker/?id=${coinId}`
+  let socialStatusURL = `${BASE_URL}/api/coin/social_stats/?id=${coinId}`
+  
 
-    axios.get(URL).then(response => {
-      console.log(response)
+  function getCoins(){
+    axios.get(coinURL).then(response => {
       let data  =  response?.data.slice(0,10)
-      console.log(data)
       dispatch(setTop10byVolume(data))
       let volumes = []
       let labels = []
@@ -27,29 +27,31 @@ const CoinDetail = (props) => {
         labels.push(exchange?.name);
         volumes.push(exchange?.volume_usd?.toFixed(2)) 
       })
-      console.log(labels, volumes)
       dispatch(setLabels(labels))
       dispatch(setVolumes(volumes))
  
     })
+  }
+
+  function getCoinStats() {
 
     axios.get(coinStatsURL).then(response => {
       dispatch(setCoinStats(response.data[0]))
-      console.log(response.data)
     })
+  }
 
-
-
-    //social status
-
+  function getSocialStats() {
     axios.get(socialStatusURL).then(response => {
       dispatch(setSocialStatus(response?.data))
     })
+  }
 
-
+  useEffect(() => {
+    getCoins()
+    getCoinStats()
+    getSocialStats()
 
     return () => {
-      console.log("cleanup")
     }
   }, [coinId])
   
@@ -96,7 +98,7 @@ const CoinDetail = (props) => {
       <div className='col-md-4 offset-md-4 col-sm-12 col-lg-4 offset-lg-4'>
          <div className='coinstats mb-4' style={{display:'flex', justifyContent:'center'}}>
                 
-          <div className="card" style={{'minWidth': '28rem'}} >
+          <div className="card" style={{'minWidth': '24rem'}} >
             <div className="card-body">
               <h4 className="card-title text-center"> {coinStats.name} <span className="card-subtitle mb-2 text-muted text-center" style={{fontSize: '0.6rem'}}> {coinStats.symbol} </span> </h4>
               
@@ -112,23 +114,20 @@ const CoinDetail = (props) => {
             <span  className="card-text">Price change 1hr: <span style={{color: coinStats.percent_change_1h >= 0 ? 'green': 'red'}}>{coinStats.percent_change_1h}$  </span></span>
             <span className="card-text">Price change 24h :  <span style={{color: coinStats.percent_change_24h >= 0 ? 'green': 'red'}}> {coinStats.percent_change_24h}$ </span></span>
         </div>
-    {socialStatus ? <div className='social'>
-        <h6>Reddit:</h6>
-        <div className='mb-2'  style={{display: 'flex', justifyContent:'space-between'}}>
-          <span  className="card-text"> Active users: <span><b>{socialStatus['reddit']?.avg_active_users?.toFixed(2)} </b></span></span>
-          <span className="card-text">Subscribers :  <span> <b>{socialStatus['reddit']?.subscribers?.toFixed(2)} </b></span></span>
-      </div>
+                {socialStatus ? <div className='social'>
+                    <h6>Reddit:</h6>
+                    <div className='mb-2'  style={{display: 'flex', justifyContent:'space-between'}}>
+                      <span  className="card-text"> Active users: <span><b>{socialStatus['reddit']?.avg_active_users?.toFixed(2)} </b></span></span>
+                      <span className="card-text">Subscribers :  <span> <b>{socialStatus['reddit']?.subscribers?.toFixed(2)} </b></span></span>
+                  </div>
 
-      <h6>Twitter:</h6>
-      <div className='mb-2'  style={{display: 'flex', justifyContent:'space-between'}}>
-        <span  className="card-text"> Active users: <span><b>{socialStatus['twitter']?.followers_count?.toFixed(2)} </b></span></span>
-        <span className="card-text">Subscribers :  <span> <b>{socialStatus['twitter']?.status_count?.toFixed(2)} </b></span></span>
-    </div>
+                  <h6>Twitter:</h6>
+                  <div className='mb-2'  style={{display: 'flex', justifyContent:'space-between'}}>
+                    <span  className="card-text"> Active users: <span><b>{socialStatus['twitter']?.followers_count?.toFixed(2)} </b></span></span>
+                    <span className="card-text">Subscribers :  <span> <b>{socialStatus['twitter']?.status_count?.toFixed(2)} </b></span></span>
+                </div>
 
-    </div> :''}
-
-              
-
+                </div> :''}
             </div>
           </div>
         </div>
@@ -137,7 +136,7 @@ const CoinDetail = (props) => {
     </div>
 
     <div className='row'>
-      <div className='col-sm-12 col-lg-4 offset-lg-4 col-md-4 offset-md-4'>
+      <div className='col-sm-12 col-lg-4 offset-lg-4 col-md-6 offset-md-3'>
       <div className='pie-chart' >
       <h3 className='text-center'> Top 10 markets with highest volume</h3>
         <Pie

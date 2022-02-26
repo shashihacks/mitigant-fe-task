@@ -28,13 +28,13 @@ const Table = () => {
             let datestring = ("0" + d.getDate()).slice(-2) + "-" + ("0"+(d.getMonth()+1)).slice(-2) + "-" +
             d.getFullYear() + " " + ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2) + ":" + ("0" + d.getSeconds()).slice(-2);
             dispatch(setLastUpdated(datestring))
-          }, 4000)
+          }, 6000)
 
           return () => clearInterval(interval)
     },[URL])
 
 
-    
+
     return (
         <>
             {isLoading ? 'Fetching coin data...' : 

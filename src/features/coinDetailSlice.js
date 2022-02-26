@@ -13,7 +13,6 @@ const coinDetailSlice = createSlice({
   
 
       setTop10byVolume: (state,action) =>{
-          console.log(action.payload)
           state.top10ByCoinsByVolume =  action.payload
        },
        setLabels: (state,action) => {

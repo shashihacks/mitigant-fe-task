@@ -22,19 +22,13 @@ const tableSlicer = createSlice({
   },
   reducers: {
 
-    previousPage: (state,action) =>{
-     console.log(state)
-    },
-    nextPage:(state,action) => {
-      console.log("next page")
-    },
     setPage: (state,action)=> {
       state.currentPage= action.payload
       if(state.currentPage === 1)
         state.start =0
       else
         state.start = ((state.currentPage -1)  *10 )
-      console.log(state.start)
+     
       
     },
     setCoins: (state,action)=> {
@@ -47,7 +41,7 @@ const tableSlicer = createSlice({
       state.lastUpdated = action.payload
     },
     sortPrice:(state, action) => {
-      console.log("sort")
+
         let sortableItems = [...state.coins];
         state.sortDirection = !state.sortDirection   
           sortableItems.sort((a, b) => {
