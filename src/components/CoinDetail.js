@@ -70,25 +70,30 @@ const CoinDetail = (props) => {
   return (
 
     <div>
+    <div className='row'>
+      <div className='col-12 text-center mt-4'>
+          <h3>Coin Details</h3>
+      </div>
+    </div>
     <div className='row mt-4'>
       <div className='col-md-4 offset-md-4 col-sm-12 col-lg-4 offset-lg-4'>
          <div className='coinstats mb-4' style={{display:'flex', justifyContent:'center'}}>
                 
           <div className="card" style={{'minWidth': '26rem'}} >
             <div className="card-body">
-              <h5 className="card-title text-center"> {coinStats.name} <span className="card-subtitle mb-2 text-muted text-center" style={{fontSize: '0.6rem'}}> {coinStats.symbol} </span> </h5>
+              <h4 className="card-title text-center"> {coinStats.name} <span className="card-subtitle mb-2 text-muted text-center" style={{fontSize: '0.6rem'}}> {coinStats.symbol} </span> </h4>
               
               <div className='mb-2' style={{display: 'flex', justifyContent:'space-between'}}>
-                  <span className="card-text">Price: {coinStats.price_usd} $ </span>
-                  <span className="card-text">Total supply:  {coinStats.tsupply}</span>
+                  <span className="card-text">Price: <b> {coinStats.price_usd}$ </b> </span>
+                  <span className="card-text">Total supply:  <b>{coinStats.tsupply} </b></span>
               </div>
               <div className='mb-2' style={{display: 'flex', justifyContent:'space-between'}}>
-                <span className="card-text">Mkt. supply: {coinStats.msupply}$ </span>
-                <span className="card-text">Mkt cap:  {coinStats.market_cap_usd}</span>
+                <span className="card-text">{coinStats.msupply ? 'Mkt. supply: ' : <b>Mkt Supply Unavailable </b>} <b>{coinStats.msupply}{coinStats.msupply ? '$' : ''}  </b></span>
+                <span className="card-text">Mkt cap:  <b> {coinStats.market_cap_usd}$ </b></span>
             </div>
           <div className='mb-2'  style={{display: 'flex', justifyContent:'space-between'}}>
-            <span className="card-text">Price change 1hr: {coinStats.percent_change_1h}$ </span>
-            <span className="card-text">Price change 24h :  {coinStats.percent_change_24h}</span>
+            <span  className="card-text">Price change 1hr: <span style={{color: coinStats.percent_change_1h >= 0 ? 'green': 'red'}}>{coinStats.percent_change_1h}$  </span></span>
+            <span className="card-text">Price change 24h :  <span style={{color: coinStats.percent_change_24h >= 0 ? 'green': 'red'}}> {coinStats.percent_change_24h}$ </span></span>
         </div>
               
 

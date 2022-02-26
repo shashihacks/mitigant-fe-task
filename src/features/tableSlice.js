@@ -17,7 +17,7 @@ const counterSlice = createSlice({
     currentPage:1,
     coins:[],
     isLoading: true,
-    lastUpdated: '',
+    lastUpdated: 'Just now',
     sortDirection: true // ascending
   },
   reducers: {
