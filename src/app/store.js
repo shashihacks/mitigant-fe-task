@@ -1,10 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
 import coinDetailReducer from "../features/coinDetailSlice";
-import counterReducer from '../features/tableSlice'
+import tableReducer from '../features/tableSlice'
 
 export default configureStore({
     reducer: {
-       counter: counterReducer,
+       table: tableReducer,
        coinDetail: coinDetailReducer
       
     }

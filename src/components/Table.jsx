@@ -1,14 +1,12 @@
 import millify from 'millify';
-import React, {useState, useEffect} from 'react'
+import React, { useEffect} from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory   } from 'react-router-dom';
 import axios from 'axios'
-import {previousPage,
-    nextPage,
-    setPage, setCoins, setLoading, setLastUpdated, sortPrice} from '../features/tableSlice'
+import { setPage, setCoins, setLoading, setLastUpdated, sortPrice, getPreviousPage, getNextPage} from '../features/tableSlice'
 
 const Table = () => {
-    const {start, page, coins, currentPage, isLoading, lastUpdated} =  useSelector(state => state.counter) ;
+    const {start, page, coins, currentPage, isLoading, lastUpdated} =  useSelector(state => state.table) ;
     const dispatch =  useDispatch()
     const history = useHistory();
     let URL = `https://api.coinlore.net/api/tickers/?start=${start}&limit=10`
@@ -34,16 +32,26 @@ const Table = () => {
 
           return () => clearInterval(interval)
     },[URL])
+
+
+    
     return (
         <>
             {isLoading ? 'Fetching coin data...' : 
             <div>
-            <div className='mt-4 mb-2' style={{display :'flex', justifyContent:'space-between'}}>
-                <h4 >Live Cryptocurrency Prices & Coin Market Caps</h4>
-                <span>{lastUpdated && <span>Last updated:</span>}  <b style={{color:'green'}}> {lastUpdated}</b></span>
+            <div className='row'>
+            <div className='mt-4 mb-2 ' >
+               
+                <h4 className='col-12 text-center'>Live Cryptocurrency Prices & Coin Market Caps</h4>
+                <span className='col-sm-12 col-md-6 offset-md-6  col-lg-3 offset-lg-9'>
+                    <span >{lastUpdated && <span>Last updated:</span>}  <b style={{color:'green'}}> {lastUpdated}</b></span>
+                </span>
+
             </div>
+            </div>
+
            
-            
+            <div className='table-responsive'>
             <table className="table table-hover">
             <thead>
                 <tr>
@@ -61,7 +69,7 @@ const Table = () => {
             { coins && coins?.map(( coin, index ) => {
                 return (                
                 <tr style={{cursor:'pointer'}} key={coin.id} onClick={() =>  history.push(`/coin/${coin.id}`)}>
-                    <td>{index + 1}</td>
+                    <td>{coin.rank}</td>
                     <td>{coin.name}</td>
                     <td>{coin.rank}</td>
                     <td>{coin.price_usd}</td>
@@ -74,16 +82,29 @@ const Table = () => {
             })}
             </tbody>
         </table>
+            </div>
+       
             </div>    
         
         }
-        <div style={{display:'flex', justifyContent:'right'}}>
-        <nav aria-label="Page navigation">
-            <ul className="pagination">
-                {[...Array(page).keys()].slice(-5).map((pageNumber, index)=> (<li key={index} className={`${pageNumber+1 === currentPage  ? 'active' : ''} page-item`}><button   className="page-link" onClick={() => dispatch(setPage(pageNumber+1)) }>{pageNumber+1}</button></li>))}
-            </ul>
-            </nav>
+        <div className='row'>
+        <div className='col-sm-12'>
+            <div style={{display:'flex', justifyContent:'right'}}>
+            <nav aria-label="Page navigation">
+                <ul className="pagination">
+                <li className="page-item"><button className="page-link" onClick={() => dispatch(getPreviousPage()) }>Previous</button></li> 
+
+                    {[...Array(page).keys()].slice(-5).map((pageNumber, index)=> (<li key={index} className={`${pageNumber+1 === currentPage  ? 'active' : ''} page-item`}><button   className="page-link" onClick={() => dispatch(setPage(pageNumber+1)) }>{pageNumber+1}</button></li>))}
+                
+                    <li className={`${currentPage > page  ? 'active' : ''} page-item`}><button className="page-link" onClick={() => dispatch(getNextPage()) }>Next</button></li>
+                
+                    </ul>
+                </nav>
+            </div>
         </div>
+
+        </div>
+
 
         </>
       

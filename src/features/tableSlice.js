@@ -8,8 +8,8 @@ import { createSlice } from '@reduxjs/toolkit'
 // const {data, isFetching} =  useGetCryptoQuery(start)
 // const [coins, setCoins] = useState([])
 
-const counterSlice = createSlice({
-  name: 'counter',
+const tableSlicer = createSlice({
+  name: 'table',
   initialState: {
     start:0,
     value:0,
@@ -58,10 +58,30 @@ const counterSlice = createSlice({
             });
         state.coins = sortableItems
    
+    },
+    getPreviousPage: (state,action) => {
+      if( state.start <=0) {
+        state.start =0 
+        state.currentPage = 1
+      }
+      else {
+        state.start = state.start - 10
+        state.currentPage = state.currentPage -1
+        if(state.page > 5)  
+          state.page = state.page - 1
+      }
+     
+     
+    },
+
+    getNextPage: (state,action) => {
+      state.start =  state.start +10
+      state.currentPage = state.currentPage +1 
+      state.page = state.page +1
     }
 
   },
 })
 
-export const {  nextPage, previousPage, setPage ,setCoins, setLoading, setLastUpdated, sortPrice} = counterSlice.actions
-export default counterSlice.reducer
+export const {  nextPage, previousPage, setPage ,setCoins, setLoading, setLastUpdated, sortPrice, getPreviousPage, getNextPage} = tableSlicer.actions
+export default tableSlicer.reducer

@@ -6,7 +6,8 @@ const coinDetailSlice = createSlice({
     initialState: {
         top10ByCoinsByVolume: [],
         chartOptions:{},
-        coinStats: ''
+        coinStats: '',
+        socialStatus: {}
     },
     reducers: {
   
@@ -23,10 +24,14 @@ const coinDetailSlice = createSlice({
        },
        setCoinStats :(state,action) => {
            state.coinStats =  action.payload
+       },
+       setSocialStatus: (state,action) => {
+           state.socialStatus = action.payload
        }
+  
   
     },
   })
   
-  export const { setTop10byVolume , setVolumes, setLabels, setCoinStats} = coinDetailSlice.actions
+  export const { setTop10byVolume , setVolumes, setLabels, setCoinStats, setSocialStatus} = coinDetailSlice.actions
   export default coinDetailSlice.reducer
