@@ -6,7 +6,7 @@ import axios from 'axios'
 import { setPage, setCoins, setLoading, setLastUpdated, sortPrice, getPreviousPage, getNextPage} from '../features/tableSlice'
 
 const Table = () => {
-    const {start, page, coins, currentPage, isLoading, lastUpdated} =  useSelector(state => state.table) ;
+    const {start, page, coins, currentPage, isLoading, lastUpdated, sortDirection} =  useSelector(state => state.table) ;
     const dispatch =  useDispatch()
     const history = useHistory();
     let URL = `https://api.coinlore.net/api/tickers/?start=${start}&limit=10`
@@ -58,7 +58,7 @@ const Table = () => {
                     <th scope="col">#</th>
                     <th scope="col">Name</th>
                     <th scope="col">Rank</th>
-                    <th style={{cursor:'pointer'}} scope="col" onClick={() => dispatch(sortPrice())}>Price (USD)</th>
+                    <th style={{cursor:'pointer'}} scope="col" onClick={() => dispatch(sortPrice())}>Price (USD)  {sortDirection ?  <img src={require('../assets/sort-up.svg').default} alt='sort-up' /> :  <img src={require('../assets/sort-down.svg').default} alt='sort-down' />  }</th>
                     <th scope="col">Market Cap (USD)</th>
                     <th scope='col'>1hr Change</th>
                     <th scope='col'>24 hrs Change</th>
