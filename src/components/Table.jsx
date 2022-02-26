@@ -8,22 +8,9 @@ import {previousPage,
     setPage, setCoins, setLoading, setLastUpdated, sortPrice} from '../features/tableSlice'
 
 const Table = () => {
-    // const [start, setStart] = useState(0)
-    // const [page, setPage] = useState(5)
-    // const [currentPage, setcurrentPage] = useState(1)
-    // const {data, isFetching} =  useGetCryptoQuery(start)
-    // const [coins, setCoins] = useState([])
- 
-
     const {start, page, coins, currentPage, isLoading, lastUpdated} =  useSelector(state => state.counter) ;
     const dispatch =  useDispatch()
     const history = useHistory();
-    // useEffect(()=> {
-    //     setCoins(data?.data)
-    // },[data, start ])
-    // const [coins, setCoins] = useState([])
-    // if(isFetching) return 'Loading...'
-    // const coins = data?.data
     let URL = `https://api.coinlore.net/api/tickers/?start=${start}&limit=10`
     const getApiData = () => {
         axios.get(URL).then(response=> {
@@ -43,7 +30,7 @@ const Table = () => {
             let datestring = ("0" + d.getDate()).slice(-2) + "-" + ("0"+(d.getMonth()+1)).slice(-2) + "-" +
             d.getFullYear() + " " + ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2) + ":" + ("0" + d.getSeconds()).slice(-2);
             dispatch(setLastUpdated(datestring))
-          }, 50000)
+          }, 4000)
 
           return () => clearInterval(interval)
     },[URL])
@@ -53,7 +40,7 @@ const Table = () => {
             <div>
             <div className='mt-4 mb-2' style={{display :'flex', justifyContent:'space-between'}}>
                 <h4 >Live Cryptocurrency Prices & Coin Market Caps</h4>
-                <span>Last updated: <b style={{color:'green'}}> {lastUpdated}</b></span>
+                <span>{lastUpdated && <span>Last updated:</span>}  <b style={{color:'green'}}> {lastUpdated}</b></span>
             </div>
            
             
