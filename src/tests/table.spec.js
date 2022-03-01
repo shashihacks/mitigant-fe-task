@@ -5,8 +5,7 @@ import React from "react";
 import { shallow , mount} from "enzyme";
 import tableReducer, {setCoins, setPage} from '../features/tableSlice'
 import * as redux from 'react-redux'
-import { screen, render } from "@testing-library/react";
-import { Homepage } from "../components";
+
 
 
 
@@ -96,6 +95,61 @@ describe("Table Component", () => {
         expect(newState.start).toEqual(10)
       })
 
+   
+    it('Should change start and current page on dispatching getNextPage', () => {
+        const previouState = getState()
+        const newState =  tableReducer(previouState, {
+            type:'table/getNextPage',
+        })
+       expect(newState.currentPage).toEqual(previouState.currentPage+1)
+       expect(newState.start).toEqual(previouState.start + 10)
+    })
+
+    it('Should not change the currentPage when previous page is clicked initially', () => {
+        const previouState = getState()
+        const newState =  tableReducer(previouState, {
+            type:'table/getPreviousPage',
+        })
+       expect(newState.currentPage).toEqual(previouState.currentPage)
+
+    })
+
+    it('Should  change the currentPage when previous page is clicked and current page is greateer than 1', () => {
+        const previouState = getState()
+        const updatedState = tableReducer(previouState, {
+            type:'table/getNextPage',
+        })
+        const newState =  tableReducer(updatedState, {
+            type:'table/getNextPage',
+        })
+        const newState2 =  tableReducer(newState, {
+            type:'table/getPreviousPage',
+        })
+
+        expect(newState2.currentPage).toEqual(newState2.currentPage )
+    })
+
+
+
+
+    it('Should  sort coin prices', async() => {
+        const previouState = getState()
+        const coins = [{"price_usd": "6.28"},{"price_usd": "200.28"}]
+        const newState =  tableReducer(previouState, {
+            type:'table/setCoins',
+            payload: coins
+        })
+        const newState2 =  tableReducer(newState, {
+            type:'table/sortPrice',
+            payload: coins
+        })
+
+        let mycoins = [...newState.coins]
+        let sortedPrices = mycoins.sort((a,b) => parseFloat(parseFloat(b['price_usd'] - a['price_usd']) ))
+          
+        expect(newState2.coins).toStrictEqual(sortedPrices)
+
+  })
 
    
 

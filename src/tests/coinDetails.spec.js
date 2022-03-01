@@ -107,6 +107,23 @@ describe('Coin Details component', () => {
         expect(Object.keys(newState.socialStatus).length).toEqual(1)
     })
 
+
+    it('Should set volumes  on dispatching setVolume', () => {
+        let previousState = getState()
+        const payload =['100','200']
+        const newState =  coinDetailReducer(previousState, {
+            type:'coinDetail/setVolumes',
+            payload
+        })
+
+        expect(newState.chartOptions.volumes).toContain('100');
+        expect(newState.chartOptions.volumes.length).toEqual(2)
+        expect(newState.chartOptions.volumes).toEqual(
+            expect.arrayContaining([expect.any(String)])
+          );
+})
+    
+
     
 
 })
