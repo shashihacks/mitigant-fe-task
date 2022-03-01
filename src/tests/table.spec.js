@@ -6,6 +6,7 @@ import { shallow , mount} from "enzyme";
 import tableReducer, {setCoins, setPage} from '../features/tableSlice'
 import * as redux from 'react-redux'
 import { screen, render } from "@testing-library/react";
+import { Homepage } from "../components";
 
 
 
@@ -95,21 +96,8 @@ describe("Table Component", () => {
         expect(newState.start).toEqual(10)
       })
 
-    //   it('Should render while loading' , () => {
-    //     React.useEffect = jest.fn((effectLogic, triggers) => effectLogic());
-    //     let wrapper = shallow(<Table />);
-    //    console.log(getState())
-    //   });
 
-
-
-
-
-
-
-
- 
-
+   
 
 })
 

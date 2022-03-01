@@ -88,7 +88,7 @@ const CoinDetail = (props) => {
 
   return (
 
-    <div>
+    <div data-test="coin-details">
     <div className='row'>
       <div className='col-12 text-center mt-4'>
           <h3>Coin Details</h3>
