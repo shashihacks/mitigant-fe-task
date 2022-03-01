@@ -44,6 +44,37 @@ describe('Coin Details component', () => {
         expect(state.top10ByCoinsByVolume.length).toEqual(0)
     })
 
+
+
+    it('Should have social status as on empty object initially', () => {
+        let previousState = getState()
+        expect(Object.keys(previousState.socialStatus).length).toBe(0)
+    })
+
+    it('Should have coinStats to be empty initially', () => {
+        let state = getState()
+        expect(state.coinStats).toBe('')
+    })
+    it('should have chartOptions to be empty object initially', () => {
+        const state= getState()
+        expect(Object.keys(state.chartOptions).length).toBe(0)
+    })
+
+    it('Should change state on disptaching setLabels', () => {
+        let previousState = getState()
+        const payload = ['Binance', 'Coinbase']
+        const newState =  coinDetailReducer(previousState, {
+            type:'coinDetail/setLabels',
+            payload
+        })
+        expect(newState.chartOptions.labels.length).toEqual(2)
+        expect(newState.chartOptions.labels).toEqual(
+            expect.arrayContaining([expect.any(String)])
+          );
+          expect(newState.chartOptions.labels).toContain('Binance');
+
+    })
+
     it('Should change state on dispatching setTop10byVolume method', async() => {
         let previousState = getState()
 
@@ -64,27 +95,18 @@ describe('Coin Details component', () => {
         expect(newState.top10ByCoinsByVolume.length).toEqual(1)
     })
 
-    it('Should change state on disptaching setLabels', () => {
+
+    it('Should set social stats on dispatching setSocialStatus', () => {
         let previousState = getState()
-        const payload = ['Binance', 'Coinbase']
+        const payload ={"reddit":{"active_users": 250}}
         const newState =  coinDetailReducer(previousState, {
-            type:'coinDetail/setLabels',
+            type:'coinDetail/setSocialStatus',
             payload
         })
-        expect(newState.chartOptions.labels.length).toEqual(2)
-        expect(newState.chartOptions.labels).toEqual(
-            expect.arrayContaining([expect.any(String)])
-          );
-          expect(newState.chartOptions.labels).toContain('Binance');
 
+        expect(Object.keys(newState.socialStatus).length).toEqual(1)
     })
 
-    it('Should have social status as on empty object initially', () => {
-        let previousState = getState()
-        expect(Object.keys(previousState.socialStatus).length).toBe(0)
-    })
-
-    
     
 
 })

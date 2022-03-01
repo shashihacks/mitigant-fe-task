@@ -20,6 +20,7 @@ const coinDetailSlice = createSlice({
        },
        setVolumes: (state, action) => {
            state.chartOptions['volumes'] = action.payload
+           console.log(action.payload)
        },
        setCoinStats :(state,action) => {
            state.coinStats =  action.payload
