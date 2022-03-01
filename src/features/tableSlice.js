@@ -1,13 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-
-
-// const [start, setStart] = useState(0)
-// const [page, setPage] = useState(5)
-// const [currentPage, setcurrentPage] = useState(1)
-// const {data, isFetching} =  useGetCryptoQuery(start)
-// const [coins, setCoins] = useState([])
-
 const tableSlicer = createSlice({
   name: 'table',
   initialState: {
@@ -32,7 +24,7 @@ const tableSlicer = createSlice({
       
     },
     setCoins: (state,action)=> {
-      state.coins = action.payload.data
+      state.coins = action.payload
     },
     setLoading: (state,action) => {
       state.isLoading = action.payload

@@ -12,13 +12,15 @@ const Table = () => {
     let URL = `https://api.coinlore.net/api/tickers/?start=${start}&limit=10`
     const getApiData = () => {
         axios.get(URL).then(response=> {
-            dispatch(setCoins(response?.data))
+            dispatch(setCoins(response?.data?.data))
             dispatch(setLoading(false))
          }).catch(err => {
              console.error(err)
          })
     }
-    
+    function test() {
+        console.log("hello")
+    }
 
     useEffect(()=> {
         getApiData();    
